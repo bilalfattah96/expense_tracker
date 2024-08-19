@@ -13,10 +13,23 @@ class ExpenseItem extends StatelessWidget {
         child: Column(
           children: [
             Text(expense.title),
-            SizedBox(height: 4,),
-            Row(children: [
-              Text(expense.amount.toStringAsFixed(2))
-            ],)
+            SizedBox(
+              height: 4,
+            ),
+            Row(
+              children: [
+                Text('RS ' + expense.amount.toString()),
+                Spacer(),
+                Row(
+                  children: [
+                    Icon(Icons.alarm),
+                    SizedBox(width: 8,),
+                    // Text('${expense.date.day}-${expense.date.month}-${expense.date.year}')
+                    Text(expense.formattedDate),
+                  ],
+                )
+              ],
+            )
           ],
         ),
       ),

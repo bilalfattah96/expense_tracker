@@ -30,8 +30,11 @@ class _ExpensesState extends State<Expenses> {
         children: [
           Text('The Chart'),
           // Text('Expense List'),
-          ExpensesList(
-            expense: _registeredExpenses,
+          
+          Expanded(
+            child: ExpensesList(
+              expense: _registeredExpenses,
+            ),
           )
         ],
       ),
