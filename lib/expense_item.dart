@@ -22,7 +22,8 @@ class ExpenseItem extends StatelessWidget {
                 Spacer(),
                 Row(
                   children: [
-                    Icon(Icons.alarm),
+                    // Icon(Icons.alarm),
+                    Icon(categoryIcons[expense.category]),
                     SizedBox(width: 8,),
                     // Text('${expense.date.day}-${expense.date.month}-${expense.date.year}')
                     Text(expense.formattedDate),
