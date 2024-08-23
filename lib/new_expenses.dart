@@ -26,6 +26,16 @@ class _NewExpensesState extends State<NewExpenses> {
     super.dispose();
   }
 
+  void _selecetedDate() {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 1, now.month, now.day);
+    showDatePicker(
+        context: context,
+        firstDate: firstDate,
+        initialDate: now,
+        lastDate: now);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -39,16 +49,46 @@ class _NewExpensesState extends State<NewExpenses> {
                 label: Text('Title'),
               ),
             ),
-             TextField(
-              controller: _amountController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                prefix: Text('RS '),
-                label: Text('Amount'),
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _amountController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      prefix: Text('RS '),
+                      label: Text('Amount'),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text('Selected Date'),
+                    IconButton(
+                        onPressed:_selecetedDate, icon: Icon(Icons.calendar_month))
+                  ],
+                ))
+              ],
+            ),
+            SizedBox(
+              height: 10,
             ),
             Row(
               children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancle'),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
                 ElevatedButton(
                   onPressed: () {
                     print(_titleController.text);
