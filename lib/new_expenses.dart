@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:expense_tracker/model/expense.dart';
 
 class NewExpenses extends StatefulWidget {
   const NewExpenses({super.key});
@@ -26,14 +27,19 @@ class _NewExpensesState extends State<NewExpenses> {
     super.dispose();
   }
 
-  void _selecetedDate() {
+  DateTime? _selecetedDate;
+
+  void _selecetedDatefunc() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
-    showDatePicker(
+    final pikedDate = await showDatePicker(
         context: context,
         firstDate: firstDate,
         initialDate: now,
         lastDate: now);
+    setState(() {
+      _selecetedDate = pikedDate;
+    });
   }
 
   @override
@@ -68,9 +74,12 @@ class _NewExpensesState extends State<NewExpenses> {
                     child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text('Selected Date'),
+                    Text(_selecetedDate == null
+                        ? 'No date selected'
+                        : formatter.format(_selecetedDate!)),
                     IconButton(
-                        onPressed:_selecetedDate, icon: Icon(Icons.calendar_month))
+                        onPressed: _selecetedDatefunc,
+                        icon: Icon(Icons.calendar_month))
                   ],
                 ))
               ],
@@ -80,11 +89,23 @@ class _NewExpensesState extends State<NewExpenses> {
             ),
             Row(
               children: [
+                DropdownButton(
+                    items: Category.values
+                        .map(
+                          (category) => DropdownMenuItem(
+                            value: category,
+                            child: Text(category.name),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      print(value);
+                    }),
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text('Cancle'),
+                  child: Text('Cancel'),
                 ),
                 SizedBox(
                   width: 5,
