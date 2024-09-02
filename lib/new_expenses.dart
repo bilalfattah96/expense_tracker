@@ -28,6 +28,7 @@ class _NewExpensesState extends State<NewExpenses> {
   }
 
   DateTime? _selecetedDate;
+  Category? _selecetedCategory;
 
   void _selecetedDatefunc() async {
     final now = DateTime.now();
@@ -40,6 +41,33 @@ class _NewExpensesState extends State<NewExpenses> {
     setState(() {
       _selecetedDate = pikedDate;
     });
+  }
+
+  void _submitExpenseData() {
+    //'123'
+    final enteredAmount = int.tryParse(_amountController.text); //123
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selecetedDate == null) {
+      //show error
+      showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                title: Text('Invalid input'),
+                content: Text(
+                    'Please make sure a valid title,amount, date category was entered.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('Okay'),
+                  ),
+                ],
+              ));
+              return;
+    }
   }
 
   @override
@@ -90,16 +118,25 @@ class _NewExpensesState extends State<NewExpenses> {
             Row(
               children: [
                 DropdownButton(
+                    value: _selecetedCategory,
                     items: Category.values
                         .map(
                           (category) => DropdownMenuItem(
                             value: category,
-                            child: Text(category.name),
+                            child: Text(
+                              category.name.toUpperCase(),
+                            ),
                           ),
                         )
                         .toList(),
                     onChanged: (value) {
-                      print(value);
+                      // print(value);
+                      if (value == null) {
+                        return;
+                      }
+                      setState(() {
+                        _selecetedCategory = value;
+                      });
                     }),
                 TextButton(
                   onPressed: () {
@@ -111,9 +148,7 @@ class _NewExpensesState extends State<NewExpenses> {
                   width: 5,
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    print(_titleController.text);
-                  },
+                  onPressed: _submitExpenseData,
                   child: Text('Save Expense'),
                 ),
               ],
