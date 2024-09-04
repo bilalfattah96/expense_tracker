@@ -17,26 +17,37 @@ class _ExpensesState extends State<Expenses> {
         amount: 1000,
         date: DateTime.now(),
         category: Category.course),
-    Expense(
-        title: 'Burger',
-        amount: 500,
-        date: DateTime.now(),
-        category: Category.food),
-    Expense(
-        title: 'Burger',
-        amount: 500,
-        date: DateTime.now(),
-        category: Category.work),
-    Expense(
-        title: 'Burger',
-        amount: 500,
-        date: DateTime.now(),
-        category: Category.travel),
+    // Expense(
+    //     title: 'Burger',
+    //     amount: 500,
+    //     date: DateTime.now(),
+    //     category: Category.food),
+    // Expense(
+    //     title: 'Burger',
+    //     amount: 500,
+    //     date: DateTime.now(),
+    //     category: Category.work),
+    // Expense(
+    //     title: 'Burger',
+    //     amount: 500,
+    //     date: DateTime.now(),
+    //     category: Category.travel),
   ];
 
-void _openModal(){
-  showModalBottomSheet(context: context, builder: (ctx)=> NewExpenses());
-}
+  void _addExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.add(expense);
+    });
+  }
+
+  void _openModal() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+        context: context,
+        builder: (ctx) => NewExpenses(
+              onAdd: _addExpense,
+            ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +55,7 @@ void _openModal(){
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed:_openModal ,
+            onPressed: _openModal,
             icon: Icon(Icons.add),
           ),
         ],
