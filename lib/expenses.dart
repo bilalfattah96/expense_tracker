@@ -40,6 +40,11 @@ class _ExpensesState extends State<Expenses> {
     });
   }
 
+ void _removeExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
+  }
   void _openModal() {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -68,6 +73,7 @@ class _ExpensesState extends State<Expenses> {
           Expanded(
             child: ExpensesList(
               expense: _registeredExpenses,
+              onRemove:_removeExpense,
             ),
           )
         ],
