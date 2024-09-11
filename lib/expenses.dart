@@ -1,3 +1,4 @@
+import 'package:expense_tracker/chart/chart.dart';
 import 'package:expense_tracker/expenses_list.dart';
 import 'package:expense_tracker/model/expense.dart';
 import 'package:expense_tracker/new_expenses.dart';
@@ -40,14 +41,28 @@ class _ExpensesState extends State<Expenses> {
     });
   }
 
- void _removeExpense(Expense expense) {
+  void _removeExpense(Expense expense) {
+    final enpenseIndex = _registeredExpenses.indexOf(expense);
     setState(() {
       _registeredExpenses.remove(expense);
     });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 3),
+        content: Text('Expense Deleted'),
+        action: SnackBarAction(label: 'Undo', onPressed: (){
+          setState(() {
+            _registeredExpenses.insert(enpenseIndex, expense);
+          });
+        }),
+      ),
+    );
   }
+
   void _openModal() {
     showModalBottomSheet(
-      isScrollControlled: true,
+        isScrollControlled: true,
         context: context,
         builder: (ctx) => NewExpenses(
               onAdd: _addExpense,
@@ -56,6 +71,15 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = Center(
+      child: Text('No Expense Found'),
+    );
+    if(_registeredExpenses.isNotEmpty){
+      mainContent = ExpensesList(
+              expense: _registeredExpenses,
+              onRemove: _removeExpense,
+            );
+    }
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -68,13 +92,11 @@ class _ExpensesState extends State<Expenses> {
       ),
       body: Column(
         children: [
-          Text('The Chart'),
+          Chart(expenses: _registeredExpenses),
+          // Text('The Chart'),
           // Text('Expense List'),
           Expanded(
-            child: ExpensesList(
-              expense: _registeredExpenses,
-              onRemove:_removeExpense,
-            ),
+            child: mainContent,
           )
         ],
       ),
